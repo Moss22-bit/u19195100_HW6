@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "View";
+}
+
+<script>
+window.onload = function () {
+    $.ajax({
+        url: '/Home/GetChartData',
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ "quantity": quantityfrominput }),
+        success: function (data) {
+            console.log(data);
+            //begin rendering
+
+            let region = [];
+            let rev_value = [];
+            try {
+
+                data.map((item) => {
+                    rev_value.push(item.ProductQuantity);
+                    region.push(item.ProductName);
+                });
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [...region],
+                        datasets: [{
+                            label: 'Regions',
+                            data: [...rev_value],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(121, 194, 50, 0.2)',
+                                'rgba(150, 127,23, 0.2)',
+                                'rgba(188, 113, 12, 0.2)',
+                                'rgba(0, 0, 88, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 159, 64, 1)',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+                
+                Swal.fire('Chart Loaded', 'Data is Found!', 'success');
+               
+                $("#cmd").prop("disabled", false);
+            }
+            catch (error) {
+                console.log(error);
+            }
+
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!'
+            });
+            
+        }
+    });
+
+}
+</script>
+
+
+
+
+
+
+
+

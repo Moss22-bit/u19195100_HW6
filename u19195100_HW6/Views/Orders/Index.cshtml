@@ -1,0 +1,53 @@
+﻿@model List<u19195100_HW6.Models.ViewModels.OrderVM>
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<h2>Orders</h2>
+@using (Html.BeginForm("Search", "Orders", FormMethod.Post))
+{
+    <form>
+        <div class="row">
+            <div class="col-lg-3">
+                <input type="date" name="date" class="form-control" />
+            </div>
+            <div class="col-1">
+                <input type="submit" value="Search" class="form-control btn btn-info" />
+            </div>
+        </div>
+    </form>
+}
+
+@for (int i = 0; i < Model.Count(); i++)
+{
+    if (Model.Where(p => p.orderID == i).Count() > 0)
+    {
+        <h1>Order @Model.Where(p => p.orderID == i).FirstOrDefault().orderID -@Model.Where(p => p.orderID == i).FirstOrDefault().date.Date.ToShortDateString() </h1>
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>List Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Where(p => p.orderID == i).ToList())
+                {
+                    <tr>
+                        <td>@order.orderID@order.ProductNames.product_name</td>
+                        <td>@order.Price</td>
+                        <td>@order.Quantity</td>
+                        <td>@order.Total</td>
+                    </tr>
+                }
+               </tbody>
+        </table>
+    }
+}
+
+
+
